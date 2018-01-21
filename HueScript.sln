@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HueScript", "HueScript\HueScript.csproj", "{8F9A697C-FAD4-4285-A8ED-1BDC3356DD6C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F9A697C-FAD4-4285-A8ED-1BDC3356DD6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F9A697C-FAD4-4285-A8ED-1BDC3356DD6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F9A697C-FAD4-4285-A8ED-1BDC3356DD6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F9A697C-FAD4-4285-A8ED-1BDC3356DD6C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3044E81A-9EAC-4F3C-871D-A8683B1D9C43}
+	EndGlobalSection
+EndGlobal

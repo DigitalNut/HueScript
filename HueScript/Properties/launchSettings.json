@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "HueScript": {
+      "commandName": "Project",
+      "commandLineArgs": "-key helloween2014key E:\\Dev\\Subversion\\Assembla\\trunk\\HueScript\\HueScript\\HueScript\\TestScript.csx"
+    }
+  }
+}
