@@ -1,4 +1,4 @@
-string set1 = "8,9";# HueScript
+# HueScript
 Use C# as your scripting language to control your Philip Hue products!
 
 HueScript is a command line program that runs on Windows and Linux, Windows 10 IOT and the Raspberry Pi. 
