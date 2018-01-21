@@ -134,8 +134,7 @@ namespace HueControlHelpers
         public static void ChangeLightColor(string[] lights, string color)
         {
             LocalHueClient client = GetClient();
-            Console.WriteLine("ChangeLightColor" + client);
-
+            
             if (client == null)
                 return;
 
@@ -179,7 +178,7 @@ namespace HueControlHelpers
                     command.SetColor(new Q42.HueApi.ColorConverters.RGBColor((int)cc.R, (int)cc.G, (int)cc.B));
                 }
 
-                Console.WriteLine("Sending command: ChangeLightColor: " + lights);
+                //Console.WriteLine("Sending command: ChangeLightColor: " + lights);
                 client.SendCommandAsync(command, lights).Wait();
             }
 

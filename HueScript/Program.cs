@@ -79,7 +79,7 @@ namespace HueScript
             //var result = CSharpScript.RunAsync(scriptFile, options, hs).GetAwaiter().GetResult();
             //var result = CSharpScript.RunAsync("ChangeLightState(\"8\", false, 0); ChangeLightState(\"8\", true, 254); ChangeLightState(\"8\", false, 0);", options, hs).GetAwaiter().GetResult();
 
-            Console.WriteLine("Finished");
+            Console.WriteLine("HueScript finished");
 
         }
     }
