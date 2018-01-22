@@ -1,4 +1,5 @@
-Hue# HueScript
+
+# HueScript
 Use C# as your scripting language to control your Philip Hue products!
 
 HueScript is a command line program that runs on Windows and Linux, Windows 10 IOT and the Raspberry Pi. 
@@ -22,6 +23,8 @@ Sample script file:
 
 ```
 string set1 = "1,2";
+int pauseTime = 2000;
+
 bool state;
 byte brightness;
 HueGetLightState("8", out state, out brightness);
@@ -29,10 +32,16 @@ Console.WriteLine("Light 8 is " + state + "  brightness is " + brightness);
 
 if (DateTime.Now.Hour == 18)
 {
-    HueTurnLightOn(set1);
+    HueTurnLightOn("1");
+    // set light 4 to on and brightness to 127
+    HueChangeLightState("4", true, 127);
 }
 
 HueChangeLightColor(set1, "ff0000");
+Sleep(pauseTime)
+HueChangeLightColor(set1, "00ff00");
+Sleep(pauseTime)
+HueChangeLightColor(set1, "0000ff");
 ```
 
 uses https://github.com/Q42/Q42.HueApi
