@@ -25,12 +25,14 @@ Most basic C# api is available, plus additional command to control the Hue.
 `if (HueIsLightOn("1")) { // then do something }`
  - `HueTurnLightOn(string lightID)` - Turn on light <br />
  `HueTurnLightOn("2");`
- - `bool HueGetLightState(string lightID, out bool state, out byte brightness)` - Returns the light state. state = lght is on (true) or off (false). brightness = brightness value from 0 to 254 <br />
+ - `bool HueGetLightState(string lightID, out bool state, out byte brightness)` - Returns the light state. <br />
+ state = light is on (true) or off (false). <br />
+ brightness = brightness value from 0 to 254 <br />
 `HueGetLightState("2", out state, out brightness)`
  - `HueChangeLightState(string lights, bool? onOff, byte? brightness)` - Changes the light state <br />
  `HueChangeLightState("2,3", true, 127);`
  - `HueChangeLightColor(string lights, string color)` - Changes the light color of one or more lights <br />
- `HueChangeLightColor("2,3", "00ff00");`
+ `HueChangeLightColor("2,3", "00ff00");` <br />
  `HueChangeLightColor("2,3", "red"); // only basic color are supported (e.g. 'red', 'blue', 'green', 'aqua', etc...)`
 
 
