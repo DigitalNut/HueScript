@@ -21,11 +21,11 @@ Examples:
 ## C# API
 Most basic C# api is available, plus additional command to control the Hue.
 
- - `bool HueIsLightOn(string lightID)` - returns if light is on <br />
+ - `bool HueIsLightOn(string lightID)` - returns true if light is on, otherwise false <br />
 `if (HueIsLightOn("1")) { // then do something }`
  - `HueTurnLightOn(string lightID)` - Turn on light <br />
  `HueTurnLightOn("2");`
- - `bool HueGetLightState(string lightID, out bool state, out byte brightness)` - Returns the light state. <br />
+ - `bool HueGetLightState(string lightID, out bool state, out byte brightness)` - Returns the light state. Return value is true if function succeeded to get values<br />
  state = light is on (true) or off (false). <br />
  brightness = brightness value from 0 to 254 <br />
 `HueGetLightState("2", out state, out brightness)`
