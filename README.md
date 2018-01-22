@@ -14,8 +14,8 @@ Prebuilt executable is in the EXE folder for desktop and ARM version (works on W
                         A Key must be registered with the Hue before using the other options
                         Example: HueCmd -register HueCmd SomeKey1234
 Examples:
-        HueCmd -ip 192.1.1.1 -key SomeKey1234 script1.csx
-        HueCmd -key SomeKey1234 -compile script2.csx            Compiles script to check for errors. Does not run script
+        HueScript -ip 192.1.1.1 -key SomeKey1234 script1.csx
+        HueScript -key SomeKey1234 -compile script2.csx            Compiles script to check for errors. Does not run script
 ```
 
 ## C# API
