@@ -19,6 +19,28 @@ Examples:
         HueCmd -key SomeKey1234 -compile script2.csx            Compiles script to check for errors. Does not run script
 ```
 
+Most basic C# api is available, plus additional command to control the Hue.
+
+```
+Hue Api exposed:
+* bool HueIsLightOn(string lightID) - returns if light is on
+e.g. if (HueIsLightOn("1")) { // then do something }
+* HueTurnLightOn(string lightID) - Turn on light. 
+e.g. HueTurnLightOn("2");
+* bool HueGetLightState(string lightID, out bool state, out byte brightness)
+state - light is on (true) or off (false)
+brightness - brightness value from 0 to 254
+e.g. HueGetLightState("2", out state, out brightness)
+* HueChangeLightState(string lights, bool? onOff, byte? brightness)
+Change the state of one or more lights
+e.g. HueChangeLightState("2,3", true, 127);
+* HueChangeLightColor(string lights, string color)
+Change color sate of a light
+e.g. HueChangeLightColor("2,3", "00ff00");
+or HueChangeLightColor("2,3", "red"); // only basic color are supported (e.g. 'red', 'blue', 'green', 'aqua', etc...)
+
+```
+
 Sample script file:
 
 ```
