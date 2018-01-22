@@ -1,4 +1,4 @@
-
+HueTurnLightOn('string lightID) - Turn on ligh't
 # HueScript
 Use C# as your scripting language to control your Philip Hue products!
 
@@ -19,10 +19,16 @@ Examples:
         HueCmd -key SomeKey1234 -compile script2.csx            Compiles script to check for errors. Does not run script
 ```
 
+## C# API
 Most basic C# api is available, plus additional command to control the Hue.
 
+ - 'bool HueIsLightOn(string lightID)' - returns if light is on
+'if (HueIsLightOn("1")) { // then do something }'
+ - 'HueTurnLightOn(string lightID)' - Turn on light
+ 'HueTurnLightOn("2");'
+ - 'bool HueGetLightState(string lightID, out bool state, out byte brightness)' - returns the light state. state = lght is on (true) or off (false). brightness = brightness value from 0 to 254
+
 ```
-Hue Api exposed:
 * bool HueIsLightOn(string lightID) - returns if light is on
 e.g. if (HueIsLightOn("1")) { // then do something }
 * HueTurnLightOn(string lightID) - Turn on light. 
