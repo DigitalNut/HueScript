@@ -114,8 +114,8 @@ namespace HueScript
                               "\t\t\tA Key must be registered with the Hue before using the other options \n" +
                               "\t\t\tExample: HueCmd -register HueCmd SomeKey1234");
             Console.WriteLine("Examples:");
-            Console.WriteLine("\tHueCmd -ip 192.1.1.1 -key SomeKey1234 script1.csx");
-            Console.WriteLine("\tHueCmd -key SomeKey1234 -compile script2.csx \t\tCompiles script to check for errors. Does not run script");
+            Console.WriteLine("\tHueScript -ip 192.1.1.1 -key SomeKey1234 script1.csx");
+            Console.WriteLine("\tHueScript -key SomeKey1234 -compile script2.csx \t\tCompiles script to check for errors. Does not run script");
         }
     }
 }
