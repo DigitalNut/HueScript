@@ -30,12 +30,13 @@ Most basic C# api is available, plus additional command to control the Hue.
  state = light is on (true) or off (false). <br />
  brightness = brightness value from 0 to 254 <br />
 `HueGetLightState("2", out state, out brightness)`
+ - `bool HueGetLightState(string lightID, out LightState state)` - Returns the light state. Gets the Hue/Saturation. Check out the Doc folder for LightState structure. <br />
  - `HueChangeLightState(string lights, bool? onOff, byte? brightness)` - Changes the light state <br />
  `HueChangeLightState("2,3", true, 127);`
  - `HueChangeLightColor(string lights, string color)` - Changes the light color of one or more lights <br />
  `HueChangeLightColor("2,3", "00ff00");` <br />
  `HueChangeLightColor("2,3", "red"); // only basic color are supported (e.g. 'red', 'blue', 'green', 'aqua', etc...)`
-
+ - `HueChangeLightState(string light, LightState state)` - Changes the light state. Access to Hue/Saturation. Check out the Doc folder for LightState structure.
 
 ### Sample script file:
 
