@@ -9,15 +9,68 @@ using Q42.HueApi.Interfaces;
 
 namespace HueControlHelpers
 {
+    /// <summary>
+    /// Script class that exposes HUE Api. Methods that start with Hue* are for use in the script
+    /// All other functions are for internal use
+    /// </summary>
     public class HueControl
     {
-        static string  IP;
-        static string  Key;
+        static private LocalHueClient _client = null;
 
+        static string IP;
+        static string Key;
+
+        /// <summary>
+        /// State for a light
+        /// </summary>
+        public class LightState
+        {
+            /// <summary>
+            /// The On/Off set of the light
+            /// </summary>
+            public bool On { get; set; }
+            /// <summary>
+            /// Brightness level. 0 to 254
+            /// </summary>
+            public byte Brightness { get; set; }
+            /// <summary>
+            /// The 'hue' color component of the light. Note this property may be null
+            /// </summary>
+            public int? Hue { get; set; }
+            /// <summary>
+            /// The 'saturation' color component of the light. Note this property me be null
+            /// </summary>
+            public int? Saturation { get; set; }
+        }
+
+        /// <summary>
+        /// constructor. Note this set the IP/Key from the command line. 
+        /// Use HueSetIPKey for script setting.
+        /// </summary>
+        /// <param name="ip">IP/hostname</param>
+        /// <param name="key">Hue app key</param>
         public HueControl(string ip, string key)
         {
             IP = ip;
             Key = key;
+        }
+
+
+        #region External Script API
+        // ---------------------------------------------------------------------------------------------------------
+        // External Script API
+
+        /// <summary>
+        /// Set the IP/Key from the script. 
+        /// </summary>
+        /// <param name="ip">IP/hostname to set or null/blank to ignore</param>
+        /// <param name="key">App Key to set or null/blank to ignore</param>
+        public static void HueSetIPKey(string ip, string key)
+        {
+            if (!String.IsNullOrEmpty(ip))
+                IP = ip;
+            if (!String.IsNullOrEmpty(key))
+                Key = key;
         }
 
         /// <summary>
@@ -43,17 +96,21 @@ namespace HueControlHelpers
             return light.Result.State.On;
         }
 
+        /// <summary>
+        /// Turns the light on (sets brightness to max)
+        /// </summary>
+        /// <param name="lightID">Light ID. E.g. "1"</param>
         public static void HueTurnLightOn(string lightID)
         {
             HueChangeLightState(lightID, true, 255);
         }
 
         /// <summary>
-        /// Gets the lights state and brightness
+        /// Gets the lights state (on/off) and brightness
         /// </summary>
         /// <param name="lightID">Light ID. E.g. "1"</param>
-        /// <param name="state"></param>
-        /// <param name="brightness"></param>
+        /// <param name="state">True light is on. False if off</param>
+        /// <param name="brightness">Brightness of the light</param>
         /// <returns></returns>
         public static bool HueGetLightState(string lightID, out bool state, out byte brightness)
         {
@@ -80,6 +137,38 @@ namespace HueControlHelpers
         }
 
         /// <summary>
+        /// Returns the complete light state
+        /// </summary>
+        /// <param name="lightID">Light ID. E.g. "1"</param>
+        /// <param name="state">Returns the LightState setting of the light</param>
+        /// <returns></returns>
+        public static bool HueGetLightState(string lightID, out LightState state)
+        {
+            LocalHueClient client = GetClient();
+
+            state = new LightState();
+
+            if (client == null)
+                return false;
+
+            var light = client.GetLightAsync(lightID);
+            light.Wait();
+            if (light == null)
+                return false;
+
+            if (light.Result == null)
+                return false;
+
+            //state = light.Result.State;
+            state.On = light.Result.State.On;
+            state.Brightness = light.Result.State.Brightness;
+            state.Hue = light.Result.State.Hue;
+            state.Saturation = light.Result.State.Saturation;
+
+            return true;
+        }
+
+        /// <summary>
         /// Change the light state
         /// </summary>
         /// <param name="light">Light ID or more then ID separated by commas. E.g. "1" or "1,2,4"</param>
@@ -88,11 +177,58 @@ namespace HueControlHelpers
         public static void HueChangeLightState(string light, bool? onOff, byte? brightness)
         {
             string[] lights = light.Split(',');
+#if DEBUG
+            Console.WriteLine($"Light string: {light}   Array size: {lights.Count()}  ON?: {onOff} Brightness?: {brightness} ");
+#endif
 
             ChangeLightState(lights, onOff, brightness);
         }
 
-        public static void ChangeLightState(string[] lights, bool? onOff, byte? brightness)
+        /// <summary>
+        /// Change the light state
+        /// </summary>
+        /// <param name="light">Light ID or more then ID separated by commas. E.g. "1" or "1,2,4"</param>
+        /// <param name="state">Fill in the LightState structure to set up the light</param>
+        public static void HueChangeLightState(string light, LightState state)
+        {
+            string[] lights = light.Split(',');
+#if DEBUG
+            Console.WriteLine($"Light string: {light}   Array size: {lights.Count()}");
+#endif
+
+            ChangeLightState(lights, state);
+        }
+
+        /// <summary>
+        /// Changes the light color
+        /// </summary>
+        /// <param name="lights">Light ID or more then ID separated by commas. E.g. "1" or "1,2,4"</param>
+        /// <param name="color">Color value in hex, or basic color name or "Once", "Multi", "ColorLoop", "None". Color hex value format is RRGGBB e.g. "00AABB". 
+        /// Basic color names such as "Red", "Blue", "Green" (Black is not allowed). </param>
+        public static void HueChangeLightColor(string lights, string color)
+        {
+            if (String.IsNullOrEmpty(lights))
+                return;
+
+            string[] lightArray = lights.Split(',');
+            //Console.WriteLine($"HueScript light: {lights}   lightarray: Size: {lightArray.Count()}");
+
+            ChangeLightColor(lightArray, color);
+        }
+        #endregion
+
+        #region Internal Methods
+        // ---------------------------------------------------------------------------------------------------------
+        // Internal routines
+
+
+        /// <summary>
+        /// Internal function to change light state
+        /// </summary>
+        /// <param name="lights">Light ID array></param>
+        /// <param name="onOff">True to turn on light. Can be null to ignore</param>
+        /// <param name="brightness">Brightness value. Can be null to ignore</param>
+        private static void ChangeLightState(string[] lights, bool? onOff, byte? brightness)
         {
             LocalHueClient client = GetClient();
 
@@ -116,22 +252,42 @@ namespace HueControlHelpers
         }
 
         /// <summary>
-        /// Changes the light color
+        /// Internal function to set light set
         /// </summary>
-        /// <param name="lights">Light ID or more then ID separated by commas. E.g. "1" or "1,2,4"</param>
-        /// <param name="color">Color value in hex, or basic color name or "Once", "Multi", "ColorLoop", "None". Color hex value format is RRGGBB e.g. "00AABB". 
-        /// Basic color names such as "Red", "Blue", "Green" (Black is not allowed). </param>
-        public static void HueChangeLightColor(string lights, string color)
+        /// <param name="lights">Light ID array</param>
+        /// <param name="state">State to change</param>
+        private static void ChangeLightState(string[] lights, LightState state)
         {
-            if (String.IsNullOrEmpty(lights))
+            LocalHueClient client = GetClient();
+
+            if (client == null)
                 return;
 
-            string[] lightArray = lights.Split(',');
+            var command = new LightCommand();
+            if (state.On == true)
+                command.On = true;
+            else
+                command.On = false;
 
-            ChangeLightColor(lightArray, color);
+            if (state.Brightness > 0)
+                command.Brightness = state.Brightness;
+
+            if (state.Hue != null)
+                command.Hue = state.Hue;
+
+            if (state.Saturation != null)
+                command.Saturation = state.Saturation;
+
+            //Console.WriteLine("Sending command");
+            client.SendCommandAsync(command, lights).Wait();
         }
 
-        public static void ChangeLightColor(string[] lights, string color)
+        /// <summary>
+        /// Internal function to change light color
+        /// </summary>
+        /// <param name="lights">Light ID array</param>
+        /// <param name="color">Color to change. Hex value in the format 'rrggbb' or color string name</param>
+        private static void ChangeLightColor(string[] lights, string color)
         {
             LocalHueClient client = GetClient();
             
@@ -188,10 +344,14 @@ namespace HueControlHelpers
         /// <summary>
         /// Helper function to create a HueCient
         /// </summary>
-        /// <returns></returns>
-        static LocalHueClient GetClient()
+        /// <returns>Client handle or null if can't connect</returns>
+        private static LocalHueClient GetClient()
         {
-            LocalHueClient client = null;
+            // do we already have a connection?
+            if (_client != null)
+            {
+                return _client;
+            }
 
             string ip = GetOrFindIP().GetAwaiter().GetResult(); ;
 
@@ -200,20 +360,22 @@ namespace HueControlHelpers
 
             IP = ip;
 
-            client = new LocalHueClient(ip);
-            client.Initialize(Key);
+            _client = new LocalHueClient(ip);
+            _client.Initialize(Key);
 
-            if (!client.IsInitialized)
+            if (!_client.IsInitialized)
+            {
+                _client = null;
                 return null;
+            }
 
-            return client;
+            return _client;
         }
 
         /// <summary>
         /// Return the command line IP address that was entered by the user or IP found by the bridge locater service
         /// </summary>
-        /// <param name="ip"></param>
-        static async Task<string> GetOrFindIP()
+        private static async Task<string> GetOrFindIP()
         {
             string ip = IP;
 
@@ -230,7 +392,7 @@ namespace HueControlHelpers
                 if (bridgeIPs.Any())
                 {
                     ip = bridgeIPs.First().IpAddress;
-                    Console.WriteLine("Bridge found using IP address: " + ip);
+                    Console.WriteLine("Bridge found.  Using IP address: " + ip);
                 }
                 else
                 {
@@ -271,5 +433,6 @@ namespace HueControlHelpers
                 Console.WriteLine("Additional detail: " + err);
             }
         }
+        #endregion
     }
 }

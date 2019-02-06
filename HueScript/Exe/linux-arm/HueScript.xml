@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HueScript</name>
+    </assembly>
+    <members>
+        <member name="M:HueScript.Program.PrintUsage">
+            <summary>
+            Print usage
+            </summary>
+        </member>
+        <member name="T:HueControlHelpers.HueControl">
+            <summary>
+            Script class that exposes HUE Api. Methods that start with Hue* are for use in the script
+            All other functions are for internal use
+            </summary>
+        </member>
+        <member name="T:HueControlHelpers.HueControl.LightState">
+            <summary>
+            State for a light
+            </summary>
+        </member>
+        <member name="P:HueControlHelpers.HueControl.LightState.On">
+            <summary>
+            The On/Off set of the light
+            </summary>
+        </member>
+        <member name="P:HueControlHelpers.HueControl.LightState.Brightness">
+            <summary>
+            Brightness level. 0 to 254
+            </summary>
+        </member>
+        <member name="P:HueControlHelpers.HueControl.LightState.Hue">
+            <summary>
+            The 'hue' color component of the light. Note this property may be null
+            </summary>
+        </member>
+        <member name="P:HueControlHelpers.HueControl.LightState.Saturation">
+            <summary>
+            The 'saturation' color component of the light. Note this property me be null
+            </summary>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.#ctor(System.String,System.String)">
+            <summary>
+            constructor. Note this set the IP/Key from the command line. 
+            Use HueSetIPKey for script setting.
+            </summary>
+            <param name="ip"></param>
+            <param name="key"></param>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.HueSetIPKey(System.String,System.String)">
+            <summary>
+            Set the IP/Key from the script. 
+            </summary>
+            <param name="ip">IP/hostname to set or null/blank to ignore</param>
+            <param name="key">App Key to set or null/blank to ignore</param>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.HueIsLightOn(System.String)">
+            <summary>
+            Returns if light is on or off
+            </summary>
+            <param name="lightID">Light ID. E.g. "1"</param>
+            <returns>true if light is on, else false</returns>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.HueTurnLightOn(System.String)">
+            <summary>
+            Turns the light on (sets brightness to max)
+            </summary>
+            <param name="lightID"></param>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.HueGetLightState(System.String,System.Boolean@,System.Byte@)">
+            <summary>
+            Gets the lights state and brightness
+            </summary>
+            <param name="lightID">Light ID. E.g. "1"</param>
+            <param name="state"></param>
+            <param name="brightness"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.HueGetLightState(System.String,HueControlHelpers.HueControl.LightState@)">
+            <summary>
+            Returns the complete light state
+            </summary>
+            <param name="lightID"></param>
+            <param name="state"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.HueChangeLightState(System.String,System.Nullable{System.Boolean},System.Nullable{System.Byte})">
+            <summary>
+            Change the light state
+            </summary>
+            <param name="light">Light ID or more then ID separated by commas. E.g. "1" or "1,2,4"</param>
+            <param name="onOff">true to turn on light, false to turn off. Pass in null if you do not wish to change state</param>
+            <param name="brightness">Brightness value 1 to 254. Pass in null if you do not wish to change brightness</param>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.HueChangeLightState(System.String,HueControlHelpers.HueControl.LightState)">
+            <summary>
+            Change the light state
+            </summary>
+            <param name="light">Light ID or more then ID separated by commas. E.g. "1" or "1,2,4"</param>
+            <param name="state"></param>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.HueChangeLightColor(System.String,System.String)">
+            <summary>
+            Changes the light color
+            </summary>
+            <param name="lights">Light ID or more then ID separated by commas. E.g. "1" or "1,2,4"</param>
+            <param name="color">Color value in hex, or basic color name or "Once", "Multi", "ColorLoop", "None". Color hex value format is RRGGBB e.g. "00AABB". 
+            Basic color names such as "Red", "Blue", "Green" (Black is not allowed). </param>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.ChangeLightState(System.String[],System.Nullable{System.Boolean},System.Nullable{System.Byte})">
+            <summary>
+            Internal function to change light state
+            </summary>
+            <param name="lights"></param>
+            <param name="onOff"></param>
+            <param name="brightness"></param>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.ChangeLightState(System.String[],HueControlHelpers.HueControl.LightState)">
+            <summary>
+            Internal function to set light set
+            </summary>
+            <param name="lights"></param>
+            <param name="state"></param>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.ChangeLightColor(System.String[],System.String)">
+            <summary>
+            Internal function to change light color
+            </summary>
+            <param name="lights"></param>
+            <param name="color"></param>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.GetClient">
+            <summary>
+            Helper function to create a HueCient
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.GetOrFindIP">
+            <summary>
+            Return the command line IP address that was entered by the user or IP found by the bridge locater service
+            </summary>
+        </member>
+        <member name="M:HueControlHelpers.HueControl.Register(System.String,System.String)">
+            <summary>
+            Register this app with the Hue
+            </summary>
+            <param name="appName">App Name. e.g. HueScript</param>
+            <param name="key">Key can be anything. e.g. huekey1234. This key is supplied when using the Hue</param>
+        </member>
+    </members>
+</doc>

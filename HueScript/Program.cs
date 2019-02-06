@@ -8,7 +8,7 @@ namespace HueScript
 {
     partial class Program
     {
-        static readonly string VersionString = "1.1";
+        static readonly string VersionString = "1.2";
 
         struct StructCmdLineOptions
         {
@@ -45,6 +45,7 @@ namespace HueScript
 
             string scriptFile = System.IO.File.ReadAllText(CmdLineOptions.scriptFile);
 
+            // Update this if more imports are required
             var options = ScriptOptions.Default.WithReferences(typeof(HueScript.Program).Assembly).WithImports("System", 
                                                                                                                "System.Collections.Generic", 
                                                                                                                "System.Threading.Thread");
@@ -76,8 +77,6 @@ namespace HueScript
 
             Console.WriteLine("Executing");
             script.RunAsync(hs).Wait();
-            //var result = CSharpScript.RunAsync(scriptFile, options, hs).GetAwaiter().GetResult();
-            //var result = CSharpScript.RunAsync("ChangeLightState(\"8\", false, 0); ChangeLightState(\"8\", true, 254); ChangeLightState(\"8\", false, 0);", options, hs).GetAwaiter().GetResult();
 
             Console.WriteLine("HueScript finished");
 
