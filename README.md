@@ -1,5 +1,6 @@
 # HueScript
 Use C# as your scripting language to control your Philip Hue products!
+Or use my code for your own scripting adventure! Let me know if you like to see more functionality, or what you are doing with the code.
 
 HueScript is a command line program that runs on Windows and Linux, Windows 10 IOT and the Raspberry Pi. 
 Prebuilt executable is in the EXE folder for desktop and ARM version (works on Windows 10 IOT Raspberry PI).
